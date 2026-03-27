@@ -1,5 +1,7 @@
 
-![Conference Logo](images/ConferenceLogo.png) # Kingston Prosthetics Research & Innovation Forum 2026
+<img src="images/ConferenceLogo.png" alt="Conference Logo" width="50%" height="auto">
+
+# Kingston Prosthetics Research & Innovation Forum 2026
 ### Conference Management System (CISC 332 Project)
 
 **Author:** Emese Elkind  
