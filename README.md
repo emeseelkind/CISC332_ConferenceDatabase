@@ -1,4 +1,5 @@
-# Kingston Prosthetics Research & Innovation Forum 2026
+
+![Conference Logo](images/ConferenceLogo.png) # Kingston Prosthetics Research & Innovation Forum 2026
 ### Conference Management System (CISC 332 Project)
 
 **Author:** Emese Elkind  
