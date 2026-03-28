@@ -14,6 +14,56 @@ include 'header.php';
     <a href="conference.php">← Back to Dashboard</a>
     <h1>Conference Schedule</h1>
 
+    <h2>Add Schedule Event</h2>
+    <form method="POST" action="schedule.php">
+        <label for="session_date">Date:</label>
+        <input type="date" name="session_date" id="session_date" required><br><br>
+        
+        <label for="start_time">Start Time:</label>
+        <input type="time" name="start_time" id="start_time" required><br><br>
+        
+        <label for="end_time">End Time:</label>
+        <input type="time" name="end_time" id="end_time" required><br><br>
+        
+        <label for="title">Session Title:</label>
+        <input type="text" name="title" id="title" required><br><br>
+        
+        <label for="speaker_id">Speaker:</label>
+        <select name="speaker_id" id="speaker_id">
+            <option value="">-- Select Speaker --</option>
+            <?php
+            $speakerStmt = $pdo->query("SELECT speaker_id, first_name, last_name FROM SPEAKER ORDER BY last_name");
+            while ($speaker = $speakerStmt->fetch()) {
+                echo "<option value='{$speaker['speaker_id']}'>{$speaker['first_name']} {$speaker['last_name']}</option>";
+            }
+            ?>
+        </select><br><br>
+        
+        <label for="location">Location:</label>
+        <input type="text" name="location" id="location" required><br><br>
+        
+        <input type="submit" value="Add Event">
+    </form>
+
+    <?php
+    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+        $session_date = $_POST['session_date'];
+        $start_time = $_POST['start_time'];
+        $end_time = $_POST['end_time'];
+        $title = $_POST['title'];
+        $speaker_id = $_POST['speaker_id'] ?: null;
+        $location = $_POST['location'];
+        
+        try {
+            $insertStmt = $pdo->prepare("INSERT INTO SESSION (title, start_time, end_time, session_date, location, speaker_id) VALUES (?, ?, ?, ?, ?, ?)");
+            $insertStmt->execute([$title, $start_time, $end_time, $session_date, $location, $speaker_id]);
+            echo "<p>Event added successfully!</p>";
+        } catch (PDOException $e) {
+            echo "<p>Error adding event: " . $e->getMessage() . "</p>";
+        }
+    }
+    ?>
+
     <form method="GET" action="schedule.php">
         <label for="day">Select Conference Day:</label>
         <select name="day" id="day" onchange="this.form.submit()">
