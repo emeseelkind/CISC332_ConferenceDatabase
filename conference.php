@@ -23,6 +23,14 @@ include 'db_connect.php';
                 <li><a href="hotel_rooms.php">Hotel Room Occupancy</a></li>
             </ul>
         </section>
+        <section class="admin-section" >
+            <h2><i class="icon"></i> Committee Oversight</h2>
+            <ul>
+                <li><a href="manage_subcommittee.php">Add/Delete Sub-Committee Members</a></li>
+        
+                <li><a href="subcommittee.php">View Sub-Committee Members</a></li>
+            </ul>
+        </section>
 
         <section class="admin-section">
             <h2><i class="icon"></i> Sponsoring Companies</h2>

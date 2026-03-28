@@ -19,7 +19,7 @@ include 'header.php';
         <select name="committee" id="committee" required>
             <option value="">-- Choose a committee --</option>
             <?php
-            $commStmt = $pdo->query("SELECT committee_name FROM COMMITTEE ORDER BY committee_name");
+            $commStmt = $pdo->query("SELECT committee_name FROM SUB_COMMITTEE ORDER BY committee_name");
             while ($comm = $commStmt->fetch()) {
                 $sel = (isset($_GET['committee']) && $_GET['committee'] === $comm['committee_name']) ? 'selected' : '';
                 echo "<option value='" . htmlspecialchars($comm['committee_name']) . "' $sel>" . htmlspecialchars($comm['committee_name']) . "</option>";
@@ -32,18 +32,21 @@ include 'header.php';
     <?php
     if (!empty($_GET['committee'])) {
         $committee = $_GET['committee'];
-        $query = "SELECT m.member_id, m.first_name, m.last_name, cm.is_chair FROM COMMITTEE_MEMBER m
-                  JOIN COMMITTEE_MEMBERSHIP cm ON m.member_id = cm.member_id
-                  WHERE cm.committee_name = ? ORDER BY m.last_name, m.first_name";
-        $stmt = $pdo->prepare($query);
+        $stmt = $pdo->prepare("SELECT member_id, first_name, last_name 
+                               FROM COMMITTEE_MEMBER 
+                               WHERE committee_name = ? 
+                               ORDER BY last_name, first_name");
         $stmt->execute([$committee]);
         $members = $stmt->fetchAll();
 
         if ($members) {
             echo "<h2>Members of " . htmlspecialchars($committee) . "</h2>";
-            echo "<table><thead><tr><th>ID</th><th>Name</th><th>Chair</th></tr></thead><tbody>";
+            echo "<table><thead><tr><th>ID</th><th>Name</th></tr></thead><tbody>";
             foreach ($members as $member) {
-                echo "<tr><td>" . $member['member_id'] . "</td><td>" . htmlspecialchars($member['first_name'] . ' ' . $member['last_name']) . "</td><td>" . ($member['is_chair'] ? 'Yes' : 'No') . "</td></tr>";
+                echo "<tr>
+                    <td>" . $member['member_id'] . "</td>
+                    <td>" . htmlspecialchars($member['first_name'] . ' ' . $member['last_name']) . "</td>
+                </tr>";
             }
             echo "</tbody></table>";
         } else {

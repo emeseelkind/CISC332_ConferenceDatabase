@@ -93,8 +93,7 @@ include 'header.php';
                 }
                 ?>
             </select>
-            <input type="submit" value="Delete Company">
-        </form>
+            <input type="submit" name="delete_company" value="Delete Company" onclick="return confirm('Are you sure? This will also remove all attendees and job ads for this company.');">        </form>
     </section>
 
     <section>
