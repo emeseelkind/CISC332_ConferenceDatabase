@@ -58,9 +58,3 @@ The application fulfills the following requirements:
 * `style.css` - Professional styling for tables, forms, and layout.
 * `database_setup.sql` - Full DB schema and sample data.
 * `/images` - Contains the official "Kingston Prosthetics Forum" logo.
-
----
-
-## 🎥 Video Demo
-A 3-5 minute video demonstration walking through all features can be found here:  
-**[Link to YouTube/ONQ Video Here]**
