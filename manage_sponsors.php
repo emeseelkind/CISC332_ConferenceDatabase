@@ -15,12 +15,13 @@ include 'header.php';
     <h1>Manage Sponsoring Companies</h1>
 
     <?php
-        if (isset($_POST['add_company'])) {
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+    if (isset($_POST['add_company'])) {
         $company_name = trim($_POST['company_name']);
         $level = $_POST['sponsor_level'];
         $emails = $_POST['emails_available'];
 
-        // Sponsor level fixed pricing
         switch ($level) {
             case 'Platinum':
                 $amount = 10000.00;
@@ -52,20 +53,32 @@ include 'header.php';
         } else {
             echo "<p style='color:red;'>Company name cannot be empty.</p>";
         }
+    } // ← closes add_company
 
-
-        if (isset($_POST['delete_company'])) {
-            $delCompany = $_POST['delete_company_name'];
-            if ($delCompany !== '') {
+    if (isset($_POST['delete_company'])) {
+        $delCompany = trim($_POST['delete_company_name']);
+        if ($delCompany !== '') {
+            try {
                 $pdo->prepare("DELETE FROM ATTENDEE WHERE company_name = ?")->execute([$delCompany]);
                 $pdo->prepare("DELETE FROM JOB_AD WHERE company_name = ?")->execute([$delCompany]);
                 $del = $pdo->prepare("DELETE FROM COMPANY WHERE company_name = ?");
                 $del->execute([$delCompany]);
-                echo "<p style='color:green;'>Company and associated attendees/jobs deleted.</p>";
+
+                if ($del->rowCount() > 0) {
+                    echo "<p style='color:green;'>Company <strong>" . htmlspecialchars($delCompany) . "</strong> and associated records deleted successfully.</p>";
+                } else {
+                    echo "<p style='color:red;'>No company found with that name. It may have already been deleted.</p>";
+                }
+            } catch (PDOException $e) {
+                echo "<p style='color:red;'>Database error: " . htmlspecialchars($e->getMessage()) . "</p>";
             }
+        } else {
+            echo "<p style='color:red;'>Please select a company to delete.</p>";
         }
-    }
-    ?>
+    } 
+
+} 
+?>
 
     <section>
         <h2>Add New Sponsor</h2>

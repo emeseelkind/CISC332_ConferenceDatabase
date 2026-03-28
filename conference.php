@@ -19,7 +19,7 @@ include 'db_connect.php';
             <h2><i class="icon"></i> Attendee Management</h2>
             <ul>
                 <li><a href="attendee_list.php">View Attendees (Students, Professionals, Sponsors)</a></li>
-                <li><a href="add_attendee.php">Add New Attendee</a></li>
+                <li><a href="add_attendee.php">Add/Delete New Attendee</a></li>
                 <li><a href="hotel_rooms.php">Hotel Room Occupancy</a></li>
             </ul>
         </section>
@@ -46,7 +46,6 @@ include 'db_connect.php';
             <ul>
                 <li><a href="schedule.php">View Daily Schedule</a></li>
                 <li><a href="switch_session.php">Switch Session Time/Location</a></li>
-                <li><a href="subcommittee.php">View Sub-Committee Members</a></li>
             </ul>
         </section>
 
