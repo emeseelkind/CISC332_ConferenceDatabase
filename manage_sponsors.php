@@ -15,37 +15,44 @@ include 'header.php';
     <h1>Manage Sponsoring Companies</h1>
 
     <?php
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (isset($_POST['add_company'])) {
-            $company_name = trim($_POST['company_name']);
-            $level = $_POST['sponsor_level'];
-            $emails = $_POST['emails_available'];
+        $company_name = trim($_POST['company_name']);
+        $level = $_POST['sponsor_level'];
+        $emails = $_POST['emails_available'];
 
-            // Sponsor level fixed pricing
-            switch ($level) {
-                case 'Platinum':
-                    $amount = 10000.00;
-                    break;
-                case 'Gold':
-                    $amount = 5000.00;
-                    break;
-                case 'Silver':
-                    $amount = 3000.00;
-                    break;
-                case 'Bronze':
-                default:
-                    $amount = 1000.00;
-                    break;
-            }
+        // Sponsor level fixed pricing
+        switch ($level) {
+            case 'Platinum':
+                $amount = 10000.00;
+                break;
+            case 'Gold':
+                $amount = 5000.00;
+                break;
+            case 'Silver':
+                $amount = 3000.00;
+                break;
+            case 'Bronze':
+            default:
+                $amount = 1000.00;
+                break;
+        }
 
-            if ($company_name !== '') {
+        if ($company_name !== '') {
+            try {
                 $insert = $pdo->prepare("INSERT INTO COMPANY (company_name, sponsor_level, sponsorship_amount, emails_available) VALUES (?, ?, ?, ?)");
                 $insert->execute([$company_name, $level, $amount, $emails]);
                 echo "<p style='color:green;'>Company added successfully.</p>";
-            } else {
-                echo "<p style='color:red;'>Company name cannot be empty.</p>";
+            } catch (PDOException $e) {
+                if ($e->getCode() === '23000') {
+                    echo "<p style='color:red;'>A company named <strong>" . htmlspecialchars($company_name) . "</strong> already exists. Please use a unique company name.</p>";
+                } else {
+                    echo "<p style='color:red;'>Database error: " . htmlspecialchars($e->getMessage()) . "</p>";
+                }
             }
+        } else {
+            echo "<p style='color:red;'>Company name cannot be empty.</p>";
         }
+
 
         if (isset($_POST['delete_company'])) {
             $delCompany = $_POST['delete_company_name'];
